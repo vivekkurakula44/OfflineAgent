@@ -1,0 +1,12 @@
+# Pure-Python OCR fallback.
+#
+# Only needed if you do NOT install the tesseract binary via render.yaml
+# aptPackages. rapidocr-onnxruntime bundles its own ONNX models and needs
+# no system packages, which makes it a good safety net.
+#
+# To use it, add this line to requirements.txt and redeploy:
+#   rapidocr-onnxruntime>=1.3.0
+#
+# Note: this adds ~200MB to the image and lengthens the build. Prefer the
+# tesseract apt package where possible.
+rapidocr-onnxruntime>=1.3.0

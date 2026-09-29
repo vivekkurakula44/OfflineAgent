@@ -1,0 +1,23 @@
+# Core web framework
+# app.py detects whether theme/css belong on Blocks() (Gradio 5) or
+# launch() (Gradio 6), so both major versions are supported.
+gradio>=5.0,<7.0
+
+# AI provider
+groq>=0.13.0
+
+# Document parsing
+PyMuPDF>=1.24.0
+python-docx>=1.1.0
+Pillow>=10.0.0
+numpy>=1.26.0
+
+# OCR (requires the tesseract binary, installed via render.yaml aptPackages)
+pytesseract>=0.3.10
+
+# Bundles a static ffmpeg binary, so video needs no apt package
+imageio-ffmpeg>=0.5.0
+
+# NOTE: torch and openai-whisper are deliberately NOT listed.
+# Together they need ~800MB of RAM and would crash a 512MB Render Free
+# instance. Audio and video are transcribed via Groq's Whisper API instead.
