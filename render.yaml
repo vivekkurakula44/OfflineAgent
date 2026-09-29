@@ -1,0 +1,45 @@
+# Render Blueprint.
+#
+# Easiest path: push this repo to GitHub, then in Render choose
+# "New > Blueprint" and point it at the repo. Render reads this file and
+# creates the service with every setting below already applied.
+#
+# Note: `repo` is intentionally omitted, so Render uses whichever repo
+# contains this file. `sync: false` on GROQ_API_KEY means Render will
+# prompt you for the key instead of storing it in git.
+
+services:
+  - type: web
+    name: offlineagent
+    runtime: python
+    plan: free
+    region: oregon
+
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: python app.py
+
+    # OCR needs the tesseract binary, which is not part of Python's
+    # standard libraries. Installing it here means image OCR works.
+    aptPackages:
+      - tesseract-ocr
+      - tesseract-ocr-eng
+
+    healthCheckPath: /
+
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false          # you will be prompted to paste your key
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: GROQ_MODEL_FALLBACKS
+        value: openai/gpt-oss-20b,qwen/qwen3.6-27b
+      - key: GROQ_STT_MODEL
+        value: whisper-large-v3-turbo
+      - key: GROQ_STT_MODEL_FALLBACKS
+        value: whisper-large-v3,distil-whisper-large-v3-en
+      - key: MAX_INPUT_CHARS
+        value: "12000"
+      - key: MAX_UPLOAD_MB
+        value: "200"
+      - key: PYTHONUNBUFFERED
+        value: "1"
